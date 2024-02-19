@@ -22,7 +22,15 @@ The output of the script is a CSV file named "transfer_table.csv". This file con
 
 - Source Plate: the name of the source plate
 - Source Well: the name of the source well
+- Compound: the name of the compound in the source plate
 - Destination Plate: the name of the destination plate
+- Transfer Volume: the volume to be transferred from the source well to the destination well
+
+**NOTES:** I have `source_plate_volumes.csv` new to the output, will document it later!
+
+## Notes
+
+If you set the `number_of_source_wells` variable to a specific number (other than -1), the script will raise an error if the number of source wells for a destination well does not match this number. To allow an arbitrary number of source wells, set `number_of_source_wells` to `-1`.
 - Destination Well: the name of the destination well
 - Transfer Volume: the volume to be transferred from the source well to the destination well
 

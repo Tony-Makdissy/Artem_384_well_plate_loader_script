@@ -26,6 +26,7 @@ source_plate_default = "Source1"  # Default name for the source plate
 destination_plate_default = "Dest1"  # Default name for the destination plate
 transfer_volume_default = 500  # Default transfer volume
 number_of_source_wells = 2  # Number of source wells per destination well. Set to -1 for arbitrary number of source wells
+starting_source_well_volume = 40_000 # Starting volume in the source well
 ############################
 
 ##### Read the xlsx file, MIGHT NEED TO TWEEK IT FOR YOUR OWN FILE ######
@@ -83,3 +84,20 @@ for i in range(destination_plate.shape[0]):
             }, ignore_index=True)
 
 transfer_table.to_csv("transfer_table.csv", index=False)
+
+# print the sum of each source well
+transfer_table_grouped = transfer_table.groupby("Source Well")["Transfer Volume"].sum()
+source_plate_volumes = pd.DataFrame(index=range(16), columns=range(1,25))
+
+
+for source_well, volume in transfer_table_grouped.items():
+    if volume > starting_source_well_volume:
+        print(f"The volume in the source well {source_well} is {volume} which is greater than the starting volume of {starting_source_well_volume}.")
+    
+    source_row, source_col = ord(source_well[0]) - ord("A"), int(source_well[1:])-1
+    orginal_content = source_plate.iloc[source_row, source_col]
+
+    source_plate_volumes.iloc[source_row, source_col] = f"{orginal_content}\n{volume}"
+
+source_plate_volumes.index = [ALPHABET[i] for i in source_plate_volumes.index]
+source_plate_volumes.to_csv("source_plate_volumes.csv")
